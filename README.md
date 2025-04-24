@@ -4,7 +4,7 @@ A Python application for building a vector database in Pinecone from instruction
 
 ## Features
 
-- Processes `.txt` and `.md` files from a data directory
+- Processes `.txt`, `.md`, `.mdx`, and `.markdown` files from a data directory
 - Chunks documents into ~1000-character segments
 - Generates embeddings using OpenAI's `text-embedding-3-small` model
 - Stores embeddings in a Pinecone vector database
@@ -54,24 +54,47 @@ A Python application for building a vector database in Pinecone from instruction
 
 ### Prepare Data
 
-Place your prompt engineering documents in the `data/raw/` directory. The system supports `.txt` and `.md` files.
+Place your prompt engineering documents in the `data/raw/` directory. The system supports `.txt`, `.md`, `.mdx`, and `.markdown` files.
 
 ## Usage
 
 Run the main script to process documents and create the vector database:
 
 ```
-python main.py
+python3 main.py
 ```
+
+### Fetching Documents from GitHub
+
+You can automatically fetch markdown files from a GitHub repository:
+
+```
+python3 main.py --github owner/repo-name
+```
+
+If the repository is private, you'll need a GitHub personal access token:
+
+```
+python3 main.py --github owner/repo-name --token your_github_token
+```
+
+To use previously fetched files without downloading again:
+
+```
+python3 main.py --github owner/repo-name --skip-fetch
+```
+
+### Processing Pipeline
 
 The script will:
 
-1. Read documents from `data/raw/`
-2. Chunk the documents into ~1000-character segments
-3. Generate embeddings for each chunk
-4. Save the embeddings to `data/processed/embedded.json`
-5. Initialize a Pinecone index (name: `prompt-feedback`)
-6. Upload the embedded chunks to Pinecone
+1. (Optional) Fetch markdown documents from GitHub if requested
+2. Read documents from `data/raw/`
+3. Chunk the documents into ~1000-character segments
+4. Generate embeddings for each chunk
+5. Save the embeddings to `data/processed/embedded.json`
+6. Initialize a Pinecone index (name: `prompt-feedback`)
+7. Upload the embedded chunks to Pinecone
 
 ## Project Structure
 

@@ -16,14 +16,14 @@ def read_file(file_path: str) -> str:
     with open(file_path, 'r', encoding='utf-8') as f:
         return f.read()
 
-def split_into_chunks(text: str, file_name: str, target_size: int = 1000) -> List[Dict[str, Any]]:
+def split_into_chunks(text: str, file_name: str, target_size: int = 750) -> List[Dict[str, Any]]:
     """
     Split a text into chunks of approximately target_size characters.
     
     Args:
         text: The text to split
         file_name: Original file name for metadata
-        target_size: Target size for each chunk in characters
+        target_size: Target size for each chunk in characters (default 750)
         
     Returns:
         List of dictionaries containing chunk text and metadata
@@ -34,8 +34,27 @@ def split_into_chunks(text: str, file_name: str, target_size: int = 1000) -> Lis
     current_chunk = ""
     
     for paragraph in paragraphs:
-        # If adding this paragraph would exceed target size, save current chunk and start a new one
-        if len(current_chunk) + len(paragraph) > target_size and current_chunk:
+        # If paragraph itself is very long, split it further
+        if len(paragraph) > target_size * 1.5:
+            # Split long paragraph into sentences
+            sentences = paragraph.replace('. ', '.\n').split('\n')
+            for sentence in sentences:
+                if len(current_chunk) + len(sentence) > target_size and current_chunk:
+                    chunks.append({
+                        "id": str(uuid.uuid4()),
+                        "text": current_chunk.strip(),
+                        "metadata": {
+                            "source": file_name
+                        }
+                    })
+                    current_chunk = sentence
+                else:
+                    if current_chunk:
+                        current_chunk += " " + sentence
+                    else:
+                        current_chunk = sentence
+        # Normal paragraph handling
+        elif len(current_chunk) + len(paragraph) > target_size and current_chunk:
             chunks.append({
                 "id": str(uuid.uuid4()),
                 "text": current_chunk.strip(),
@@ -64,7 +83,7 @@ def split_into_chunks(text: str, file_name: str, target_size: int = 1000) -> Lis
 
 def chunk_documents(directory: str) -> List[Dict[str, Any]]:
     """
-    Process all .txt and .md files in a directory and chunk them.
+    Process all .txt, .md, and .mdx files in a directory and chunk them.
     
     Args:
         directory: Path to the directory containing documents
@@ -75,7 +94,7 @@ def chunk_documents(directory: str) -> List[Dict[str, Any]]:
     all_chunks = []
     
     for filename in os.listdir(directory):
-        if filename.endswith(('.txt', '.md')):
+        if filename.endswith(('.txt', '.md', '.mdx', '.markdown')):
             file_path = os.path.join(directory, filename)
             print(f"Processing {file_path}...")
             

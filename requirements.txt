@@ -1,5 +1,6 @@
 openai>=1.0.0
-pinecone-client>=2.2.0
+pinecone>=2.2.0
 python-dotenv>=0.19.0
 tqdm>=4.65.0
-uuid>=1.30 
+uuid>=1.30
+requests>=2.25.0 

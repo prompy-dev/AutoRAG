@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 from typing import List, Dict, Any
-import pinecone
+from pinecone import Pinecone, ServerlessSpec
 from tqdm import tqdm
 
 def initialize_pinecone():
@@ -17,8 +17,8 @@ def initialize_pinecone():
     if not api_key:
         raise ValueError("PINECONE_API_KEY must be set")
     
-    # Initialize Pinecone (newer versions only need API key)
-    pinecone.init(api_key=api_key)
+    # Initialize Pinecone with the new API pattern
+    pc = Pinecone(api_key=api_key)
     
     # Index parameters
     index_name = "prompt-feedback"
@@ -26,16 +26,22 @@ def initialize_pinecone():
     metric = "cosine"
     
     # Check if our index already exists
-    if index_name not in pinecone.list_indexes():
+    existing_indexes = [index.name for index in pc.list_indexes()]
+    if index_name not in existing_indexes:
         print(f"Creating Pinecone index '{index_name}'...")
-        pinecone.create_index(
+        # Create a serverless index with simplified approach
+        pc.create_index(
             name=index_name,
             dimension=dimension,
-            metric=metric
+            metric=metric,
+            spec=ServerlessSpec(
+                cloud="aws",
+                region="us-east-1"
+            )          
         )
     
     # Connect to the index
-    index = pinecone.Index(index_name)
+    index = pc.Index(index_name)
     return index
 
 def upload_to_pinecone(embedded_chunks: List[Dict[str, Any]]):
