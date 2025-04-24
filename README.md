@@ -5,7 +5,7 @@ A Python application for automatically building vector databases from document c
 ## Features
 
 - Processes `.txt`, `.md`, `.mdx`, and `.markdown` files from a data directory
-- Chunks documents into ~1000-character segments
+- Chunks documents into ~750-character segments
 - Generates embeddings using OpenAI's `text-embedding-3-small` model
 - Stores embeddings in a Pinecone vector database
 - Saves processed data to a local JSON file
@@ -115,9 +115,11 @@ AutoRAG/
 │   ├── __init__.py     # Package initialization
 │   ├── chunker.py      # Functions for chunking documents
 │   ├── embedder.py     # Functions for generating embeddings
+│   ├── github_fetcher.py # Functions for fetching markdown files from GitHub
 │   └── uploader.py     # Functions for uploading to Pinecone
 ├── .env                # Environment variables (create from .env.example)
 ├── .env.example        # Example environment file
+├── .gitignore          # Git ignore file
 ├── main.py             # Main script
 ├── README.md           # This file
 └── requirements.txt    # Project dependencies
