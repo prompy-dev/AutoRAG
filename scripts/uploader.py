@@ -21,7 +21,7 @@ def initialize_pinecone():
     pc = Pinecone(api_key=api_key)
     
     # Index parameters
-    index_name = "prompt-feedback"
+    index_name = "auto-rag"
     dimension = 1536  # Dimension for text-embedding-3-small
     metric = "cosine"
     

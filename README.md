@@ -1,6 +1,6 @@
-# Prompt Engineering RAG System
+# AutoRAG
 
-A Python application for building a vector database in Pinecone from instructional documents on prompt engineering. This system processes documents, generates embeddings using OpenAI, and stores them in Pinecone for retrieval.
+A Python application for automatically building vector databases from document collections. This system processes documents, generates embeddings using OpenAI, and stores them in Pinecone for retrieval and RAG (Retrieval-Augmented Generation) applications.
 
 ## Features
 
@@ -24,7 +24,7 @@ A Python application for building a vector database in Pinecone from instruction
 
    ```
    git clone [repository-url]
-   cd prompt-feedback-rag
+   cd AutoRAG
    ```
 
 2. Create a virtual environment and activate it:
@@ -99,7 +99,7 @@ The script will:
 ## Project Structure
 
 ```
-prompt-feedback-rag/
+AutoRAG/
 ├── data/
 │   ├── raw/            # Place your documents here
 │   └── processed/      # Output directory for processed data
@@ -117,9 +117,10 @@ prompt-feedback-rag/
 
 ## Modules
 
-- **Chunker**: Splits documents into chunks of approximately 1000 characters
+- **Chunker**: Splits documents into chunks of approximately 750 characters
 - **Embedder**: Generates embeddings for text chunks using OpenAI
 - **Uploader**: Manages Pinecone database initialization and uploads
+- **GitHub Fetcher**: Clones GitHub repositories and extracts markdown files for processing
 
 ## License
 
