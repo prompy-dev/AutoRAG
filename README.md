@@ -84,6 +84,14 @@ To use previously fetched files without downloading again:
 python3 main.py --github owner/repo-name --skip-fetch
 ```
 
+### Custom Pinecone Index
+
+You can specify a custom Pinecone index name:
+
+```
+python3 main.py --index-name my-custom-index
+```
+
 ### Processing Pipeline
 
 The script will:

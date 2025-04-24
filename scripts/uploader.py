@@ -4,9 +4,12 @@ from typing import List, Dict, Any
 from pinecone import Pinecone, ServerlessSpec
 from tqdm import tqdm
 
-def initialize_pinecone():
+def initialize_pinecone(index_name: str = "prompt-feedback"):
     """
     Initialize the Pinecone client and create the index if it doesn't exist.
+    
+    Args:
+        index_name: Name of the Pinecone index to use
     
     Returns:
         Pinecone index object
@@ -21,7 +24,6 @@ def initialize_pinecone():
     pc = Pinecone(api_key=api_key)
     
     # Index parameters
-    index_name = "auto-rag"
     dimension = 1536  # Dimension for text-embedding-3-small
     metric = "cosine"
     
@@ -44,15 +46,16 @@ def initialize_pinecone():
     index = pc.Index(index_name)
     return index
 
-def upload_to_pinecone(embedded_chunks: List[Dict[str, Any]]):
+def upload_to_pinecone(embedded_chunks: List[Dict[str, Any]], index_name: str = "prompt-feedback"):
     """
     Upload embedded chunks to Pinecone.
     
     Args:
         embedded_chunks: List of chunks with embeddings
+        index_name: Name of the Pinecone index to use
     """
     # Initialize Pinecone
-    index = initialize_pinecone()
+    index = initialize_pinecone(index_name)
     
     # Prepare vectors for upsert
     vectors = []

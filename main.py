@@ -22,6 +22,7 @@ def main():
     parser.add_argument("--github", help="GitHub repository in format owner/name to fetch markdown files")
     parser.add_argument("--token", help="GitHub personal access token (optional)")
     parser.add_argument("--skip-fetch", action="store_true", help="Skip fetching files from GitHub")
+    parser.add_argument("--index-name", default="prompt-feedback", help="Name of the Pinecone index (default: prompt-feedback)")
     args = parser.parse_args()
     
     # Load environment variables
@@ -64,8 +65,8 @@ def main():
         
         # Step 5: Upload to Pinecone
         if embedded_chunks:
-            print("Uploading to Pinecone...")
-            upload_to_pinecone(embedded_chunks)
+            print(f"Uploading to Pinecone index '{args.index_name}'...")
+            upload_to_pinecone(embedded_chunks, args.index_name)
             print("Process completed successfully!")
         else:
             print("No embedded chunks to upload to Pinecone.")
